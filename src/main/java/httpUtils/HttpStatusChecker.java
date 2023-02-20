@@ -6,17 +6,23 @@ import org.jsoup.Jsoup;
 
 import java.io.IOException;
 
-import static org.jsoup.Jsoup.connect;
+
 
 public class HttpStatusChecker {
-    String getStatusImage(int code){
+   public static String getStatusImage(int code){
         Connection.Response response = null;
+        String url = "https://http.cat/"+code;
         try {
-            response = Jsoup.connect("https://http.cat/"+code).execute();
+            int statusCode = Jsoup.connect(url)
+                    .ignoreContentType(true)
+                    .timeout(1000)
+                    .execute()
+                    .statusCode();
+
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        int statusCode = response.statusCode();
-
+        return url;
     }
 }
